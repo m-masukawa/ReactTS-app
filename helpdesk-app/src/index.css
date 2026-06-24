@@ -1,0 +1,231 @@
+/* src/index.css */
+body {
+  background-image: linear-gradient(rgba(5, 3, 8, 0.65), rgba(5, 3, 8, 0.85)), 
+                    url('https://images.unsplash.com/photo-1462331940025-496dfbfc7564?q=80&w=2048&auto=format&fit=crop');
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+  
+  color: #e2d9f3;
+  font-family: 'Impact', 'Arial Black', sans-serif;
+  letter-spacing: 1.5px;
+  margin: 0;
+  padding: 20px;
+  min-height: 100vh;
+}
+
+h1, h2 {
+  color: #f1ebfc;
+  text-shadow: 
+    0 0 5px #9d72e6, 
+    0 0 15px #7a3bf5, 
+    0 0 30px #bd00ff;
+  text-transform: uppercase;
+  font-style: italic;
+  text-align: center;
+}
+
+.eo-nav {
+  padding: 10px 0;
+  margin-bottom: 25px;
+  border-bottom: 2px solid #321b57;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.eo-nav-links {
+  display: flex;
+  gap: 10px;
+}
+
+.eo-main-container {
+  padding: 0 10px;
+}
+
+.eo-filter-panel {
+  margin-bottom: 15px;
+  background-color: #120b24;
+  padding: 15px;
+  border: 1px solid #29184a;
+  border-radius: 0;
+}
+
+.eo-filter-title {
+  margin-right: 10px;
+  font-weight: bold;
+  color: #da70d6;
+}
+
+.eo-filter-info {
+  font-size: 14px;
+  margin-bottom: 15px;
+  color: #a37df2;
+}
+
+.eo-card {
+  padding: 20px;
+  border: 1px solid #6332c2;
+  background-color: #120b24;
+  margin-top: 10px;
+}
+
+.eo-card-header {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.eo-card-header h2 {
+  margin: 0;
+  text-align: left;
+}
+
+.eo-divider {
+  border: 0;
+  border-top: 1px solid #29184a;
+  margin: 15px 0;
+}
+
+.eo-log-box {
+  background-color: #0d071a;
+  padding: 15px;
+  border: 1px solid #321b57;
+  margin-bottom: 20px;
+  white-space: pre-wrap;
+  font-family: sans-serif;
+  letter-spacing: 0.5px;
+}
+
+.eo-form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  max-width: 500px;
+}
+
+.eo-form-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.eo-form-label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
+}
+
+.eo-required-badge {
+  color: #ff007f;
+}
+
+.eo-error-text {
+  color: #ff007f;
+  font-size: 12px;
+  margin: 5px 0 0 0;
+  font-family: sans-serif;
+}
+
+table {
+  border-collapse: separate;
+  border-spacing: 0 10px;
+  width: 100%;
+}
+
+th {
+  color: #da70d6;
+  text-transform: uppercase;
+  font-size: 14px;
+  padding: 10px;
+  border-bottom: 1px solid #7a3bf5;
+  text-align: left;
+}
+
+td {
+  padding: 15px 10px;
+  text-align: left;
+}
+
+tr {
+  background-color: #120b24;
+  border: 1px solid #29184a;
+  transition: all 0.3s ease;
+}
+
+tr:hover {
+  transform: scale(1.01) translateY(-2px);
+  background-color: #221440;
+  box-shadow: 0 0 20px rgba(157, 114, 230, 0.6);
+}
+
+button {
+  background: linear-gradient(135deg, #bfa3f0 0%, #6332c2 50%, #2f1266 100%);
+  border: 1px solid #a37df2;
+  color: #fff;
+  padding: 10px 20px;
+  font-weight: bold;
+  font-style: italic;
+  border-radius: 0px;
+  cursor: pointer;
+  box-shadow: 0 0 8px rgba(122, 59, 245, 0.5);
+  text-transform: uppercase;
+  text-shadow: 1px 1px 2px #000;
+  transition: all 0.2s ease;
+}
+
+button:hover {
+  filter: brightness(1.2);
+  box-shadow: 0 0 15px #bd00ff;
+}
+
+button:active {
+  transform: scale(0.95);
+}
+
+button:disabled {
+  background: #221440;
+  border-color: #321b57;
+  color: #554477;
+  cursor: not-allowed;
+  box-shadow: none;
+  text-shadow: none;
+}
+
+.btn-lang-toggle {
+  background: linear-gradient(135deg, #da70d6, #7a3bf5);
+  border: 1px solid #fff;
+}
+
+input[type="text"], textarea, select {
+  background-color: #0d071a;
+  border: 1px solid #6332c2;
+  color: #f1ebfc;
+  padding: 8px;
+  border-radius: 0;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+input[type="text"]:focus, textarea:focus, select:focus {
+  outline: none;
+  border-color: #bd00ff;
+  box-shadow: 0 0 10px #bd00ff;
+}
+
+.badge-pending {
+  color: #ff007f;
+  font-weight: bold;
+  text-shadow: 0 0 8px #ff007f;
+}
+
+.badge-progress {
+  color: #00ffff;
+  font-weight: bold;
+  text-shadow: 0 0 8px #00ffff;
+}
+
+.badge-completed {
+  color: #bcff00;
+  font-weight: bold;
+  text-shadow: 0 0 8px #bcff00;
+}
