@@ -5,8 +5,7 @@ import { InquiryDetailPage } from "./pages/InquiryDetailPage";
 import { InquiryCreatePage } from "./pages/InquiryCreatePage";
 import { InquiryAboutPage } from "./pages/InquiryAboutPage";
 import { inquiryApi } from "./api/inquiries";
-import type { Inquiry, InquiryCreateInput, InquiryStatus, Language } from "./types/inquiry";
-
+import type { Inquiry, InquiryStatus, Language } from "./types/inquiry";
 
 function App() {
   const [inquiries, setInquiries] = useState<Inquiry[]>([]);
@@ -74,11 +73,18 @@ function App() {
     }
   };
 
-  const handleAdd = async (input: InquiryCreateInput) => {
+  const handleAdd = async (input: {
+    titleJa: string;
+    titleEn: string;
+    contentJa: string;
+    contentEn: string;
+    requesterJa: string;
+    requesterEn: string;
+  }) => {
     try {
       await inquiryApi.create(input);
       setCurrentPage("list");
-      fetchInquiries();
+      await fetchInquiries();
     } catch (err) {
       console.error(err);
       alert("新規登録に失敗しました。");

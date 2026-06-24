@@ -1,21 +1,34 @@
-import { api } from '../lib/api'
-import type { Inquiry, InquiryCreateInput, InquiryStatus } from '../types/inquiry'
+import axios from "axios";
+import type { Inquiry, InquiryStatus } from "../types/inquiry";
+
+export type InquiryCreatePayloadAll = {
+  titleJa: string;
+  titleEn: string;
+  contentJa: string;
+  contentEn: string;
+  requesterJa: string;
+  requesterEn: string;
+};
+
+const API_BASE_URL = "http://localhost:8000/api";
 
 export const inquiryApi = {
-  getAll: async (status?: string): Promise<Inquiry[]> => {
-    const params = status && status !== 'all' ? { status } : {}
-    const response = await api.get<Inquiry[]>('/api/inquiries', { params })
-    return response.data
+  getAll: async (): Promise<Inquiry[]> => {
+    const response = await axios.get<Inquiry[]>(`${API_BASE_URL}/inquiries`);
+    return response.data;
   },
-  create: async (input: InquiryCreateInput): Promise<Inquiry> => {
-    const response = await api.post<Inquiry>('/api/inquiries', input)
-    return response.data
+
+  create: async (input: InquiryCreatePayloadAll): Promise<Inquiry> => {
+    const response = await axios.post<Inquiry>(`${API_BASE_URL}/inquiries`, input);
+    return response.data;
   },
+
   updateStatus: async (id: number, status: InquiryStatus): Promise<Inquiry> => {
-    const response = await api.put<Inquiry>(`/api/inquiries/${id}`, { status })
-    return response.data
+    const response = await axios.put<Inquiry>(`${API_BASE_URL}/inquiries/${id}/status`, { status });
+    return response.data;
   },
+
   delete: async (id: number): Promise<void> => {
-    await api.delete(`/api/inquiries/${id}`)
+    await axios.delete(`${API_BASE_URL}/inquiries/${id}`);
   },
-}
+};
