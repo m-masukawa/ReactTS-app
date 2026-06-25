@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Inquiry;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Gate;
 
 class InquiryController extends Controller
 {
@@ -46,6 +47,7 @@ class InquiryController extends Controller
 
     public function destroy(Inquiry $inquiry): JsonResponse
     {
+        Gate::authorize('admin');
         $inquiry->delete();
         return response()->json(null, 204);
     }

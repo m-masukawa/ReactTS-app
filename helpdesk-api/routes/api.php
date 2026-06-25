@@ -1,8 +1,19 @@
 <?php
 
+use App\Http\Controllers\AuthController;
+use App\Http\Controllers\InquiryController;
 use Illuminate\Support\Facades\Route;
 
-use App\Http\Controllers\InquiryController;
+// 🔓 誰でもアクセスできるルート（ユーザー登録・ログイン）
+Route::post('/auth/register', [AuthController::class, 'register']);
+Route::post('/auth/login',    [AuthController::class, 'login']);
 
-Route::apiResource('inquiries', InquiryController::class)
-    ->only(['index', 'store', 'update', 'destroy']);
+// 🔐 ログインしたユーザーだけがアクセスできるルート
+Route::middleware('auth:sanctum')->group(function () {
+    Route::post('/auth/logout', [AuthController::class, 'logout']);
+    Route::get('/auth/me',      [AuthController::class, 'me']);
+    
+    // 💡 問い合わせルートもここ（ログイン必須グループ）に移動させます
+    Route::apiResource('inquiries', InquiryController::class)
+        ->only(['index', 'store', 'update', 'destroy']);
+});
