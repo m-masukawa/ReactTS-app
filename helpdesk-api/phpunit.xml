@@ -1,188 +1,36 @@
-# Helpdesk API (Backend)
-
-Laravel 13 で構築された、ヘルプデスク（問い合わせ管理）システムのバックエンドAPIサーバーです。
-
-Laravel Sanctum による API トークン認証に加え、Gate（ゲート）による管理者限定の認可機能を実装しています。
-
----
-
-## 🚀 技術スタック
-
-* **Framework:** Laravel 13.x
-* **Language:** PHP 8.2+
-* **Database:** MySQL 8.x
-* **Testing:** PHPUnit 12.x
-* **Authentication:** Laravel Sanctum（API Token）
-
----
-
-## 🛠️ 環境構築・セットアップ手順
-
-リポジトリをクローンした後、`helpdesk-api` ディレクトリ内で以下の手順を実行してください。
-
-### 1. 依存パッケージのインストール
-
-```bash
-composer install
-```
-
-### 2. 環境変数の設定
-
-`.env.example` をコピーして `.env` ファイルを作成し、ご自身の MySQL 環境に合わせてデータベース接続情報を修正してください。
-
-```bash
-cp .env.example .env
-```
-
-`.env` の設定例
-
-```env
-DB_CONNECTION=mysql
-DB_HOST=127.0.0.1
-DB_PORT=3306
-DB_DATABASE=helpdesk_api_db
-DB_USERNAME=root
-DB_PASSWORD=your_password
-```
-
-### 3. アプリケーションキーの生成
-
-```bash
-php artisan key:generate
-```
-
-### 4. データベースの初期化 & シーディング
-
-マイグレーションを実行し、初期データを投入します。
-
-多言語対応カラム（`titleJa`、`contentJa` など）を備えた問い合わせデータ（3件）と、テスト用アカウントが自動生成されます。
-
-```bash
-php artisan migrate:fresh --seed
-```
-
----
-
-## 🔑 開発用テストアカウント
-
-フロントエンドからの動作確認をスムーズに行うため、以下のテストユーザーをシードしています。
-
-| 権限     | 名前      | メールアドレス | パスワード    | is_admin |
-| ------ | ------- | ------- | -------- | -------- |
-| 管理者    | 司令官ボグ   | ad@ad   | 12345678 | true     |
-| 一般ユーザー | キャプテンEO | e@o     | 12345678 | false    |
-
-### 動作確認ポイント
-
-* 管理者ユーザー：削除API実行可能
-* 一般ユーザー：削除API実行時に403エラー
-
----
-
-## 5. ローカルサーバーの起動
-
-```bash
-php artisan serve
-```
-
-デフォルトでは以下で API サーバーが起動します。
-
-```text
-http://localhost:8000
-```
-
----
-
-## 🧪 自動テスト（PHPUnit）
-
-本プロジェクトでは、認証・認可エンドポイントの健全性を保つための Feature Test を導入しています。
-
-### テスト実行
-
-```bash
-php artisan test
-```
-
----
-
-## 💡 データベースに関する仕様と注意点
-
-Windows 環境などで発生しやすい SQLite ドライバー依存の問題を避けるため、テスト時も本番と同じ MySQL を利用するよう `phpunit.xml` を設定しています。
-
-各テストクラスでは以下を利用しています。
-
-```php
-use RefreshDatabase;
-```
-
-そのため、テスト実行時には開発用データベースが一度リセットされます。
-
-テスト後に画面確認などを行う場合は、シーダーを再実行してデータを復元してください。
-
-```bash
-php artisan db:seed
-```
-
----
-
-## 🔒 認可（Authorization）の仕様
-
-### 管理者ゲート（admin Gate）
-
-`AppServiceProvider.php` にて定義しています。
-
-`users` テーブルの `is_admin` カラムが `true` のユーザーのみを管理者として認可します。
-
-### 対象エンドポイント
-
-```http
-DELETE /api/inquiries/{id}
-```
-
-### 一般ユーザーの場合
-
-一般ユーザー（`is_admin = false`）のトークンで削除リクエストを送信すると、
-
-```php
-Gate::authorize('admin');
-```
-
-が実行され、自動的に以下を返します。
-
-```http
-403 Forbidden
-```
-
-レスポンス例
-
-```json
-{
-  "message": "This action is unauthorized."
-}
-```
-
-### 管理者ユーザーの場合
-
-管理者ユーザー（`is_admin = true`）であれば削除処理が実行され、
-
-```http
-204 No Content
-```
-
-が返却されます。
-
----
-
-## 📚 主な機能
-
-* 問い合わせ一覧取得
-* 問い合わせ詳細取得
-* 問い合わせ登録
-* 問い合わせ更新
-* 問い合わせ削除（管理者のみ）
-* APIトークン認証（Sanctum）
-* Gateによる認可制御
-* PHPUnitによる機能テスト
-* 多言語対応（日本語・英語）
-
----
+<?xml version="1.0" encoding="UTF-8"?>
+<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="vendor/phpunit/phpunit/phpunit.xsd"
+         bootstrap="vendor/autoload.php"
+         colors="true"
+>
+    <testsuites>
+        <testsuite name="Unit">
+            <directory>tests/Unit</directory>
+        </testsuite>
+        <testsuite name="Feature">
+            <directory>tests/Feature</directory>
+        </testsuite>
+    </testsuites>
+    <source>
+        <include>
+            <directory>app</directory>
+        </include>
+    </source>
+    <php>
+        <env name="APP_ENV" value="testing"/>
+        <env name="APP_MAINTENANCE_DRIVER" value="file"/>
+        <env name="BCRYPT_ROUNDS" value="4"/>
+        <env name="BROADCAST_CONNECTION" value="null"/>
+        <env name="CACHE_STORE" value="array"/>
+        <!-- <env name="DB_CONNECTION" value="sqlite"/>
+        <env name="DB_DATABASE" value=":memory:"/> -->
+        <env name="DB_URL" value=""/>
+        <env name="MAIL_MAILER" value="array"/>
+        <env name="QUEUE_CONNECTION" value="sync"/>
+        <env name="SESSION_DRIVER" value="array"/>
+        <env name="PULSE_ENABLED" value="false"/>
+        <env name="TELESCOPE_ENABLED" value="false"/>
+        <env name="NIGHTWATCH_ENABLED" value="false"/>
+    </php>
+</phpunit>

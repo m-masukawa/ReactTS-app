@@ -1,58 +1,188 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Helpdesk API (Backend)
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Laravel 13 で構築された、ヘルプデスク（問い合わせ管理）システムのバックエンドAPIサーバーです。
 
-## About Laravel
+Laravel Sanctum による API トークン認証に加え、Gate（ゲート）による管理者限定の認可機能を実装しています。
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+---
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## 🚀 技術スタック
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+* **Framework:** Laravel 13.x
+* **Language:** PHP 8.2+
+* **Database:** MySQL 8.x
+* **Testing:** PHPUnit 12.x
+* **Authentication:** Laravel Sanctum（API Token）
 
-## Learning Laravel
+---
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+## 🛠️ 環境構築・セットアップ手順
 
-In addition, [Laracasts](https://laracasts.com) contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+リポジトリをクローンした後、`helpdesk-api` ディレクトリ内で以下の手順を実行してください。
 
-You can also watch bite-sized lessons with real-world projects on [Laravel Learn](https://laravel.com/learn), where you will be guided through building a Laravel application from scratch while learning PHP fundamentals.
-
-## Agentic Development
-
-Laravel's predictable structure and conventions make it ideal for AI coding agents like Claude Code, Cursor, and GitHub Copilot. Install [Laravel Boost](https://laravel.com/docs/ai) to supercharge your AI workflow:
+### 1. 依存パッケージのインストール
 
 ```bash
-composer require laravel/boost --dev
-
-php artisan boost:install
+composer install
 ```
 
-Boost provides your agent 15+ tools and skills that help agents build Laravel applications while following best practices.
+### 2. 環境変数の設定
 
-## Contributing
+`.env.example` をコピーして `.env` ファイルを作成し、ご自身の MySQL 環境に合わせてデータベース接続情報を修正してください。
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+```bash
+cp .env.example .env
+```
 
-## Code of Conduct
+`.env` の設定例
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+```env
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=helpdesk_api_db
+DB_USERNAME=root
+DB_PASSWORD=your_password
+```
 
-## Security Vulnerabilities
+### 3. アプリケーションキーの生成
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+```bash
+php artisan key:generate
+```
 
-## License
+### 4. データベースの初期化 & シーディング
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+マイグレーションを実行し、初期データを投入します。
+
+多言語対応カラム（`titleJa`、`contentJa` など）を備えた問い合わせデータ（3件）と、テスト用アカウントが自動生成されます。
+
+```bash
+php artisan migrate:fresh --seed
+```
+
+---
+
+## 🔑 開発用テストアカウント
+
+フロントエンドからの動作確認をスムーズに行うため、以下のテストユーザーをシードしています。
+
+| 権限     | 名前      | メールアドレス | パスワード    | is_admin |
+| ------ | ------- | ------- | -------- | -------- |
+| 管理者    | 司令官ボグ   | ad@ad   | 12345678 | true     |
+| 一般ユーザー | キャプテンEO | e@o     | 12345678 | false    |
+
+### 動作確認ポイント
+
+* 管理者ユーザー：削除API実行可能
+* 一般ユーザー：削除API実行時に403エラー
+
+---
+
+## 5. ローカルサーバーの起動
+
+```bash
+php artisan serve
+```
+
+デフォルトでは以下で API サーバーが起動します。
+
+```text
+http://localhost:8000
+```
+
+---
+
+## 🧪 自動テスト（PHPUnit）
+
+本プロジェクトでは、認証・認可エンドポイントの健全性を保つための Feature Test を導入しています。
+
+### テスト実行
+
+```bash
+php artisan test
+```
+
+---
+
+## 💡 データベースに関する仕様と注意点
+
+Windows 環境などで発生しやすい SQLite ドライバー依存の問題を避けるため、テスト時も本番と同じ MySQL を利用するよう `phpunit.xml` を設定しています。
+
+各テストクラスでは以下を利用しています。
+
+```php
+use RefreshDatabase;
+```
+
+そのため、テスト実行時には開発用データベースが一度リセットされます。
+
+テスト後に画面確認などを行う場合は、シーダーを再実行してデータを復元してください。
+
+```bash
+php artisan db:seed
+```
+
+---
+
+## 🔒 認可（Authorization）の仕様
+
+### 管理者ゲート（admin Gate）
+
+`AppServiceProvider.php` にて定義しています。
+
+`users` テーブルの `is_admin` カラムが `true` のユーザーのみを管理者として認可します。
+
+### 対象エンドポイント
+
+```http
+DELETE /api/inquiries/{id}
+```
+
+### 一般ユーザーの場合
+
+一般ユーザー（`is_admin = false`）のトークンで削除リクエストを送信すると、
+
+```php
+Gate::authorize('admin');
+```
+
+が実行され、自動的に以下を返します。
+
+```http
+403 Forbidden
+```
+
+レスポンス例
+
+```json
+{
+  "message": "This action is unauthorized."
+}
+```
+
+### 管理者ユーザーの場合
+
+管理者ユーザー（`is_admin = true`）であれば削除処理が実行され、
+
+```http
+204 No Content
+```
+
+が返却されます。
+
+---
+
+## 📚 主な機能
+
+* 問い合わせ一覧取得
+* 問い合わせ詳細取得
+* 問い合わせ登録
+* 問い合わせ更新
+* 問い合わせ削除（管理者のみ）
+* APIトークン認証（Sanctum）
+* Gateによる認可制御
+* PHPUnitによる機能テスト
+* 多言語対応（日本語・英語）
+
+---

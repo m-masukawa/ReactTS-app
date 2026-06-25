@@ -1,4 +1,4 @@
-import axios from "axios";
+import { api } from '../lib/api';
 import type { Inquiry, InquiryStatus } from "../types/inquiry";
 
 export type InquiryCreatePayloadAll = {
@@ -10,25 +10,24 @@ export type InquiryCreatePayloadAll = {
   requesterEn: string;
 };
 
-const API_BASE_URL = "http://localhost:8000/api";
 
 export const inquiryApi = {
   getAll: async (): Promise<Inquiry[]> => {
-    const response = await axios.get<Inquiry[]>(`${API_BASE_URL}/inquiries`);
+    const response = await api.get<Inquiry[]>('/inquiries');
     return response.data;
   },
 
   create: async (input: InquiryCreatePayloadAll): Promise<Inquiry> => {
-    const response = await axios.post<Inquiry>(`${API_BASE_URL}/inquiries`, input);
+    const response = await api.post<Inquiry>('/inquiries', input);
     return response.data;
   },
 
   updateStatus: async (id: number, status: InquiryStatus): Promise<Inquiry> => {
-    const response = await axios.put<Inquiry>(`${API_BASE_URL}/inquiries/${id}/status`, { status });
-    return response.data;
-  },
+  const response = await api.put<Inquiry>(`/inquiries/${id}`, { status });
+  return response.data;
+},
 
   delete: async (id: number): Promise<void> => {
-    await axios.delete(`${API_BASE_URL}/inquiries/${id}`);
+    await api.delete(`/inquiries/${id}`);
   },
 };
