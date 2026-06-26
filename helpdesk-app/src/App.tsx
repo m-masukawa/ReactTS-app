@@ -7,11 +7,12 @@ import { InquiryListPage } from "./pages/InquiryListPage";
 import { InquiryDetailPage } from "./pages/InquiryDetailPage";
 import { InquiryCreatePage } from "./pages/InquiryCreatePage";
 import { InquiryAboutPage } from "./pages/InquiryAboutPage";
-import { useAuth } from "./hooks/useAuth"; // 💡 追加
+import { useAuth } from "./hooks/useAuth";
 import { inquiryApi } from "./api/inquiries";
 import type { Inquiry, InquiryStatus, Language } from "./types/inquiry";
 import type { User } from "./types/auth";
 import axios from 'axios';
+import eoImage from './assets/eo.png';
 
 type Page = "list" | "detail" | "about" | "create";
 type AuthMode = "login" | "register";
@@ -123,7 +124,7 @@ function InquiryPage({ user, onLogout }: InquiryPageProps) {
   };
 
   const t = {
-    ja: { navList: "一覧", navCreate: "新規登録", navAbout: "作品概要", title: "ヘルプデスク", loading: "通信中...", logout: "ログアウト" },
+    ja: { navList: "一覧", navCreate: "新規登録", navAbout: "作品概要", title: "コマンドセンター", loading: "通信中...", logout: "ログアウト" },
     en: { navList: "LIST", navCreate: "NEW INQUIRY", navAbout: "ABOUT EO", title: "COMMAND CENTER", loading: "LOADING...", logout: "LOGOUT" }
   }[language];
 
@@ -145,7 +146,23 @@ function InquiryPage({ user, onLogout }: InquiryPageProps) {
         </div>
       </nav>
 
-      <h1>{t.title}</h1>
+<h1 
+  style={{ 
+    backgroundImage: `url(${eoImage})`,
+    backgroundSize: '120px auto',
+    backgroundPosition: 'center',
+    backgroundRepeat: 'no-repeat',
+    mixBlendMode: 'screen',
+    minHeight: '100px',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    fontWeight: 900
+  }} 
+  className="text-white text-3xl text-center bg-transparent tracking-wider" 
+>
+  {t.title}
+</h1>
 
       {isLoading ? (
         <div style={{ color: "#00ffff", textAlign: "center", marginTop: "2rem" }}>{t.loading}</div>
