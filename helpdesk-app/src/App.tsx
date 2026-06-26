@@ -83,16 +83,16 @@ function InquiryPage({ user, onLogout }: InquiryPageProps) {
       setCurrentPage("list");
       fetchInquiries();
     } catch (err) {
-  if (axios.isAxiosError(err)) {
-    if (err.response?.status === 403) {
-      alert('削除には管理者権限が必要です');
-      return;
-    }
-  }
+      if (axios.isAxiosError(err)) {
+        if (err.response?.status === 403) {
+          alert('削除には管理者権限が必要です');
+          return;
+        }
+      }
 
-  console.error(err);
-  alert("削除に失敗しました。");
-}
+      console.error(err);
+      alert("削除に失敗しました。");
+    }
   };
 
   const handleAdd = async (input: {
@@ -130,14 +130,16 @@ function InquiryPage({ user, onLogout }: InquiryPageProps) {
 
   return (
     <div className="eo-main-container">
-      <nav className="eo-nav">
+      {/* ナビゲーションバーの調整 */}
+      <nav className="eo-nav" style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
         <div className="eo-nav-links">
           <button onClick={() => { setSelectedId(null); setCurrentPage("list"); }}>{t.navList}</button>
           <button onClick={() => { setSelectedId(null); setCurrentPage("create"); }}>{t.navCreate}</button>
           <button onClick={() => { setSelectedId(null); setCurrentPage("about"); }}>{t.navAbout}</button>
         </div>
+        
         <div style={{ display: "flex", alignItems: "center", gap: "1rem" }}>
-          <span style={{ color: "#00ffff" }}>{user.name}</span>
+
           <button onClick={onLogout} className="btn-logout">{t.logout}</button>
           
           <button onClick={() => setLanguage(language === "ja" ? "en" : "ja")} className="btn-lang-toggle">
@@ -146,34 +148,35 @@ function InquiryPage({ user, onLogout }: InquiryPageProps) {
         </div>
       </nav>
 
-<h1 
-  style={{ 
-    backgroundImage: `url(${eoImage})`,
-    backgroundSize: '120px auto',
-    backgroundPosition: 'center',
-    backgroundRepeat: 'no-repeat',
-    mixBlendMode: 'screen',
-    minHeight: '100px',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    fontWeight: 900
-  }} 
-  className="text-white text-3xl text-center bg-transparent tracking-wider" 
->
-  {t.title}
-</h1>
+      <h1 
+        style={{ 
+          backgroundImage: `url(${eoImage})`,
+          backgroundSize: '120px auto',
+          backgroundPosition: 'center',
+          backgroundRepeat: 'no-repeat',
+          mixBlendMode: 'screen',
+          minHeight: '100px',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          fontWeight: 900
+        }} 
+        className="text-white text-3xl text-center bg-transparent tracking-wider" 
+      >
+        {t.title}
+      </h1>
 
       {isLoading ? (
         <div style={{ color: "#00ffff", textAlign: "center", marginTop: "2rem" }}>{t.loading}</div>
       ) : (
         <main>
-          {currentPage === "list" && (
-            <InquiryListPage inquiries={inquiries}
-              onSelectInquiry={handleSelectInquiry}
-              onDeleteInquiry={handleDeleteInquiry}
-              lang={language} />
-          )}
+{currentPage === "list" && (
+  <InquiryListPage inquiries={inquiries}
+    onSelectInquiry={handleSelectInquiry}
+    onDeleteInquiry={handleDeleteInquiry}
+    lang={language}
+    user={user} />
+)}
           {currentPage === "detail" && selectedId !== null && (
             <InquiryDetailPage inquiries={inquiries}
               selectedId={selectedId}

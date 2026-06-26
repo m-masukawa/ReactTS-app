@@ -235,3 +235,103 @@ input[type="text"]:focus, textarea:focus, select:focus {
   font-weight: bold;
   text-shadow: 0 0 8px #bcff00;
 }
+
+/* --- ユーザーステータスパネル（サイバーUI） --- */
+.user-status-panel {
+  display: flex;
+  align-items: center;
+  background: linear-gradient(90deg, rgba(31, 16, 66, 0.8) 0%, rgba(18, 11, 36, 0.4) 100%);
+  border-left: 4px solid #00ffff; /* 左側のサイバーアクセントライン */
+  border-right: 1px solid #6332c2;
+  border-top: 1px solid #29184a;
+  border-bottom: 1px solid #29184a;
+  padding: 8px 16px;
+  gap: 12px;
+  box-shadow: inset 0 0 10px rgba(0, 255, 255, 0.1), 0 4px 12px rgba(0, 0, 0, 0.5);
+  margin-bottom: 25px; /* 下の一覧とのディスタンス */
+}
+
+/* アバターの光る外枠 */
+.user-avatar-wrapper {
+  position: relative;
+  width: 36px;
+  height: 36px;
+  background: #120b24;
+  border: 1px solid #7a3bf5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.user-avatar-glow {
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  box-shadow: 0 0 8px #7a3bf5;
+  animation: user-avatar-pulse 2s infinite ease-in-out;
+}
+
+.user-avatar-char {
+  color: #bfa3f0;
+  font-size: 12px;
+  font-weight: bold;
+  font-family: monospace;
+}
+
+/* ユーザーテキスト情報 */
+.user-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.user-tag {
+  font-size: 9px;
+  color: #7a3bf5;
+  letter-spacing: 2px;
+  font-weight: bold;
+}
+
+.user-name {
+  font-size: 14px;
+  color: #ffffff;
+  font-weight: bold;
+  text-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
+  font-family: monospace;
+}
+
+/* 右端のONLINE点滅インジケーター */
+.system-pulse {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 10px;
+  color: #00ffff;
+  font-weight: bold;
+  letter-spacing: 1px;
+}
+
+.pulse-dot {
+  width: 6px;
+  height: 6px;
+  background-color: #00ffff;
+  border-radius: 50%;
+  box-shadow: 0 0 8px #00ffff;
+  animation: user-dot-blink 1.5s infinite ease-in-out;
+}
+
+/* アニメーション処理 */
+@keyframes user-avatar-pulse {
+  0%, 100% { opacity: 0.4; }
+  50% { opacity: 1; }
+}
+
+@keyframes user-dot-blink {
+  0%, 100% { opacity: 0.3; transform: scale(0.8); }
+  50% { opacity: 1; transform: scale(1.2); }
+}
+
+/* ボタンも均等に伸ばしたい場合用（絞り込みボタン調整） */
+.eo-filter-panel button {
+  flex: 1;
+  white-space: nowrap;
+}
