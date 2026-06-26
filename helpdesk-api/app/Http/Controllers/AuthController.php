@@ -65,8 +65,35 @@ class AuthController extends Controller
     }
 
     // 👑 現在のログインユーザー情報取得
+    // 👑 現在のログインユーザー情報取得
     public function me(Request $request)
     {
         return response()->json($request->user());
+    }
+
+    // 🚀 ★ここにプロフィール更新メソッドを追加！
+    public function updateProfile(Request $request)
+    {
+        // 1. バリデーション（名前は必須、画像は任意文字列）
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'avatarUrl' => 'nullable|string', // フロントから avatarUrl で届くBase64文字列
+        ]);
+
+        // 2. ログイン中のユーザーモデルを取得
+        $user = $request->user();
+
+        // 3. 届いたデータでデータベースを更新
+        $user->name = $request->name;
+        $user->avatar_url = $request->avatarUrl; // マイグレーションで作ったカラム名
+        $user->save();
+
+        // 4. フロントの `onUpdateSuccess` が要求するオブジェクト形式で返却
+        return response()->json([
+            'id' => $user->id,
+            'name' => $user->name,
+            'email' => $user->email,
+            'avatarUrl' => $user->avatar_url, // React側が読み取れるようにキャメルケースで同期
+        ]);
     }
 }

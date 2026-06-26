@@ -8,12 +8,13 @@ use Illuminate\Support\Facades\Route;
 Route::post('/auth/register', [AuthController::class, 'register']);
 Route::post('/auth/login',    [AuthController::class, 'login']);
 
-// 🔐 ログインしたユーザーだけがアクセスできるルート
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('/auth/logout', [AuthController::class, 'logout']);
     Route::get('/auth/me',      [AuthController::class, 'me']);
     
-    // 💡 問い合わせルートもここ（ログイン必須グループ）に移動させます
+    // ★ ここにプロフィール更新のルートを追記！
+    Route::put('/user/profile', [AuthController::class, 'updateProfile']);
+    
     Route::apiResource('inquiries', InquiryController::class)
         ->only(['index', 'store', 'update', 'destroy']);
 });

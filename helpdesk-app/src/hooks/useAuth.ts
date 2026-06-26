@@ -70,8 +70,11 @@ export function useAuth() {
     }
   }
 
+  const updateUser = (updatedUser: User) => {
+    setUser(updatedUser);
+  };
+
   const isLoggedIn = user !== null
 
-  // 💡 register を外から呼べるように return に追加
-  return { user, isLoggedIn, isLoading, login, register, logout }
+  return { user, isLoggedIn, isLoading, login, register, logout , updateUser ,}
 }

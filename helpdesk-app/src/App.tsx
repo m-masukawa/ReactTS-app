@@ -1,4 +1,4 @@
-//最親コンポーネント
+// 最親コンポーネント
 
 import { useEffect, useState } from "react";
 import { LoginForm } from "./components/LoginForm";
@@ -13,16 +13,18 @@ import type { Inquiry, InquiryStatus, Language } from "./types/inquiry";
 import type { User } from "./types/auth";
 import axios from 'axios';
 import eoImage from './assets/eo.png';
+import { MyPage } from "./pages/MyPage";
 
-type Page = "list" | "detail" | "about" | "create";
+type Page = "list" | "detail" | "about" | "create" | "mypage";
 type AuthMode = "login" | "register";
 
 type InquiryPageProps = {
   user: User;
   onLogout: () => void;
+  onUpdateUser: (updatedUser: User) => void;
 };
 
-function InquiryPage({ user, onLogout }: InquiryPageProps) {
+function InquiryPage({ user, onLogout, onUpdateUser }: InquiryPageProps) {
   const [inquiries, setInquiries] = useState<Inquiry[]>([]);
   const [currentPage, setCurrentPage] = useState<Page>("list");
   const [selectedId, setSelectedId] = useState<number | null>(null);
@@ -124,8 +126,8 @@ function InquiryPage({ user, onLogout }: InquiryPageProps) {
   };
 
   const t = {
-    ja: { navList: "一覧", navCreate: "新規登録", navAbout: "作品概要", title: "コマンドセンター", loading: "通信中...", logout: "ログアウト" },
-    en: { navList: "LIST", navCreate: "NEW INQUIRY", navAbout: "ABOUT EO", title: "COMMAND CENTER", loading: "LOADING...", logout: "LOGOUT" }
+    ja: { navList: "一覧", navCreate: "新規登録", navAbout: "作品概要", navMyPage: "マイページ", title: "コマンドセンター", loading: "通信中...", logout: "ログアウト" },
+    en: { navList: "LIST", navCreate: "NEW INQUIRY", navAbout: "ABOUT EO", navMyPage: "MY PAGE", title: "COMMAND CENTER", loading: "LOADING...", logout: "LOGOUT" }
   }[language];
 
   return (
@@ -136,12 +138,11 @@ function InquiryPage({ user, onLogout }: InquiryPageProps) {
           <button onClick={() => { setSelectedId(null); setCurrentPage("list"); }}>{t.navList}</button>
           <button onClick={() => { setSelectedId(null); setCurrentPage("create"); }}>{t.navCreate}</button>
           <button onClick={() => { setSelectedId(null); setCurrentPage("about"); }}>{t.navAbout}</button>
+          <button onClick={() => { setSelectedId(null); setCurrentPage("mypage"); }}>{t.navMyPage}</button>
         </div>
         
         <div style={{ display: "flex", alignItems: "center", gap: "1rem" }}>
-
           <button onClick={onLogout} className="btn-logout">{t.logout}</button>
-          
           <button onClick={() => setLanguage(language === "ja" ? "en" : "ja")} className="btn-lang-toggle">
             We are here to change the world!
           </button>
@@ -170,13 +171,27 @@ function InquiryPage({ user, onLogout }: InquiryPageProps) {
         <div style={{ color: "#00ffff", textAlign: "center", marginTop: "2rem" }}>{t.loading}</div>
       ) : (
         <main>
-{currentPage === "list" && (
-  <InquiryListPage inquiries={inquiries}
-    onSelectInquiry={handleSelectInquiry}
-    onDeleteInquiry={handleDeleteInquiry}
-    lang={language}
-    user={user} />
-)}
+          {currentPage === "list" && (
+            <InquiryListPage inquiries={inquiries}
+              onSelectInquiry={handleSelectInquiry}
+              onDeleteInquiry={handleDeleteInquiry}
+              lang={language}
+              user={user} />
+          )}
+
+          {/* ★ 1つ目のマイページだけを残し、型もしっかり指定しました */}
+          {currentPage === "mypage" && (
+            <MyPage 
+              user={user} 
+              lang={language} 
+              onBack={handleBack} 
+              onUpdateSuccess={(updatedUser: User) => {
+                onUpdateUser(updatedUser); 
+                setCurrentPage("list");
+              }} 
+            />
+          )}
+
           {currentPage === "detail" && selectedId !== null && (
             <InquiryDetailPage inquiries={inquiries}
               selectedId={selectedId}
@@ -185,14 +200,18 @@ function InquiryPage({ user, onLogout }: InquiryPageProps) {
               onDeleteInquiry={handleDeleteInquiry}
               lang={language} />
           )}
+
           {currentPage === "create" && (
             <InquiryCreatePage onAdd={handleAdd}
               onBack={handleBack}
               lang={language} />
           )}
+
           {currentPage === "about" && (
             <InquiryAboutPage lang={language} />
           )}
+
+          {/* ★ ここにあった2つ目の重複コードをすっきり削除しました */}
         </main>
       )}
     </div>
@@ -200,7 +219,7 @@ function InquiryPage({ user, onLogout }: InquiryPageProps) {
 }
 
 function App() {
-  const { user, isLoggedIn, isLoading, login, register, logout } = useAuth();
+  const { user, isLoggedIn, isLoading, login, register, logout, updateUser } = useAuth();
   const [authMode, setAuthMode] = useState<AuthMode>("login");
 
   if (isLoading) {
@@ -229,7 +248,7 @@ function App() {
     );
   }
 
-  return <InquiryPage user={user!} onLogout={logout} />;
+  return <InquiryPage user={user!} onLogout={logout} onUpdateUser={updateUser} />;
 }
 
 export default App;

@@ -83,8 +83,20 @@ export const InquiryListPage = ({ inquiries, onSelectInquiry, onDeleteInquiry, l
         <div className="user-status-panel" style={{ margin: 0 }}>
           <div className="user-avatar-wrapper">
             <div className="user-avatar-glow"></div>
-            <span className="user-avatar-char">OP</span> 
+
+            {/* ★ここを修正：画像データがあれば img を、なければ初期文字 OP を出す */}
+    {(user as any).avatarUrl ? (
+      <img 
+        src={(user as any).avatarUrl} 
+        alt="avatar" 
+        style={{ width: "100%", height: "100%", objectFit: "cover" }} 
+      />
+    ) : (
+      <span className="user-avatar-char">OP</span> 
+    )}
+    
           </div>
+          
           <div className="user-info">
             <span className="user-tag">{t.userRole}</span>
             <span className="user-name" style={{ color: "#00ffff" }}>{user.name}</span>
