@@ -65,7 +65,6 @@ export const InquiryTable = ({
 
   return (
     <div className="eo-main-container">
-      {/* 💡 インラインスタイルをすべて撤去し、index.css の純粋な <table> を最優先に */}
       <table>
         <thead>
           <tr>

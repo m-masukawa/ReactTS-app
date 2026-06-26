@@ -44,11 +44,16 @@ h1, h2 {
 }
 
 .eo-filter-panel {
-  margin-bottom: 15px;
-  background-color: #120b24;
-  padding: 15px;
-  border: 1px solid #29184a;
-  border-radius: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px; 
+  width: 100%;
+}
+
+.eo-filter-panel button {
+  flex: 1;
+  white-space: nowrap;
 }
 
 .eo-filter-title {
@@ -162,7 +167,8 @@ button {
   background: linear-gradient(135deg, #bfa3f0 0%, #6332c2 50%, #2f1266 100%);
   border: 1px solid #a37df2;
   color: #fff;
-  padding: 10px 20px;
+  padding: 0 20px;
+  height: 35px;
   font-weight: bold;
   font-style: italic;
   border-radius: 0px;

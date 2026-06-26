@@ -20,14 +20,12 @@ export function RegisterForm({ onRegister, onSwitchToLogin }: RegisterFormProps)
     formState: { errors, isSubmitting },
   } = useForm<RegisterInput>()
 
-  // パスワードの一致チェックのために、現在のパスワード入力を監視
   const password = watch('password', '')
 
   const onSubmit = async (data: RegisterInput) => {
     try {
       await onRegister(data)
     } catch (e) {
-      // Laravel からバリデーションエラー（メール重複など）が返ってきた場合の処理
       if (axios.isAxiosError(e) && e.response?.status === 422) {
         const body = e.response.data as LaravelValidationError
         Object.entries(body.errors).forEach(([field, messages]) => {
