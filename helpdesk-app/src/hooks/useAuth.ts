@@ -8,9 +8,7 @@ const TOKEN_KEY = 'auth_token'
 export function useAuth() {
   const [user, setUser] = useState<User | null>(null)
   const [isLoading, setIsLoading] = useState(true)
-
-// 起動時に localStorage のトークンを確認してユーザーを復元する
-// 起動時に localStorage のトークンを確認してユーザーを復元する
+  
   useEffect(() => {
     let isMounted = true;
 
@@ -21,14 +19,12 @@ export function useAuth() {
         return
       }
 
-      // axios のデフォルトヘッダーにトークンをセット
       api.defaults.headers.common['Authorization'] = `Bearer ${token}`
       
       try {
         const fetchedUser = await authApi.me()
         if (isMounted) setUser(fetchedUser)
       } catch {
-        // トークンが無効な場合はクリアする
         localStorage.removeItem(TOKEN_KEY)
         delete api.defaults.headers.common['Authorization']
       } finally {
@@ -51,7 +47,6 @@ export function useAuth() {
     return user
   }
 
-  // 👇 ここに練習課題の register 関数を追加
   const register = async (input: RegisterInput) => {
     const { user, token } = await authApi.register(input)
     localStorage.setItem(TOKEN_KEY, token)

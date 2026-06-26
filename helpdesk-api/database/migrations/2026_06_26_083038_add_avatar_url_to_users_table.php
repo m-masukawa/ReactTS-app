@@ -9,7 +9,6 @@ return new class extends Migration
     public function up(): void
 {
     Schema::table('users', function (Blueprint $table) {
-        // Base64は文字列が非常に長くなるため、TEXT型、もしくはLONGTEXT型で定義します
         $table->longText('avatar_url')->nullable()->after('email');
     });
 }

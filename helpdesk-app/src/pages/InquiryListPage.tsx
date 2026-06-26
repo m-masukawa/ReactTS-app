@@ -1,7 +1,7 @@
 // 一覧画面
 import { useState } from "react";
 import type { Inquiry, InquiryStatus, Language } from "../types/inquiry";
-import type { User } from "../types/auth"; // ★ User型をインポート
+import type { User } from "../types/auth";
 import { InquiryTable } from "../components/InquiryTable";
 
 type FilterValue = InquiryStatus | "all";
@@ -12,7 +12,7 @@ type InquiryListPageProps = {
   onSelectInquiry: (id: number) => void;
   onDeleteInquiry: (id: number) => void;
   lang: Language;
-  user: User; // ★ user プロパティを追加
+  user: User;
 };
 
 export const InquiryListPage = ({ inquiries, onSelectInquiry, onDeleteInquiry, lang, user }: InquiryListPageProps) => {
@@ -63,8 +63,6 @@ export const InquiryListPage = ({ inquiries, onSelectInquiry, onDeleteInquiry, l
 
   return (
     <div>
-      {/* ★1. まず「並び替え＆ユーザーパネル」のエリアを一番上に持ってきます */}
-      {/* 境界線を消して、少し下にマージンを持たせます */}
       <div style={{ 
         marginTop: "15px", 
         paddingBottom: "15px",
@@ -72,19 +70,16 @@ export const InquiryListPage = ({ inquiries, onSelectInquiry, onDeleteInquiry, l
         justifyContent: "space-between", 
         alignItems: "center" 
       }}>
-        {/* 左側：並び替えコントロール */}
         <div>
           <span style={{ marginRight: "10px", fontSize: "14px", color: "#00ffff", fontWeight: "bold" }}>{t.sortSub}</span>
           <button onClick={() => setSortBy("date")} style={getSortButtonStyle("date")}>{t.sortDate}</button>
           <button onClick={() => setSortBy("status")} style={getSortButtonStyle("status")}>{t.sortStatus}</button>
         </div>
 
-        {/* 右側：爆イケユーザーパネル */}
         <div className="user-status-panel" style={{ margin: 0 }}>
           <div className="user-avatar-wrapper">
             <div className="user-avatar-glow"></div>
 
-            {/* ★ここを修正：画像データがあれば img を、なければ初期文字 OP を出す */}
     {(user as any).avatarUrl ? (
       <img 
         src={(user as any).avatarUrl} 
@@ -94,7 +89,7 @@ export const InquiryListPage = ({ inquiries, onSelectInquiry, onDeleteInquiry, l
     ) : (
       <span className="user-avatar-char">OP</span> 
     )}
-    
+
           </div>
           
           <div className="user-info">
@@ -108,8 +103,6 @@ export const InquiryListPage = ({ inquiries, onSelectInquiry, onDeleteInquiry, l
         </div>
       </div>
 
-      {/* ★2. 「ステータス絞り込み」パネルをここに引っ越し！（赤線の場所） */}
-      {/* 区切り用の borderTop と paddingTop をこちらに移植しました */}
       <div 
         className="eo-filter-panel" 
         style={{ 
@@ -130,12 +123,10 @@ export const InquiryListPage = ({ inquiries, onSelectInquiry, onDeleteInquiry, l
         <button onClick={() => setFilter("completed")} style={getButtonClass("completed")}>{t.completed} ({countCompleted})</button>
       </div>
 
-      {/* 該当件数情報 */}
       <p className="eo-filter-info">
         {t.match} <strong>{sortedInquiries.length}</strong> {t.unit} {t.total} {inquiries.length} {t.unit}
       </p>
 
-      {/* テーブル表示部分 */}
       {filteredInquiries.length === 0 ? (
         <p style={{ color: "#7a3bf5", fontStyle: "italic", marginTop: "20px" }}>{t.empty}</p>
       ) : (

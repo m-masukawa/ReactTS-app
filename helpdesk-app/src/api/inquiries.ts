@@ -30,9 +30,8 @@ export const inquiryApi = {
     await api.delete(`/inquiries/${id}`);
   },
 
-  // ★修正: axios を直接呼ばず、設定済みの api インスタンスを使うようにしました
   updateProfile: async (input: { name: string; avatarUrl: string | null }) => {
-    const response = await api.put("/user/profile", input); // エンドポイントのパスはバックエンドに合わせて調整してください
+    const response = await api.put("/user/profile", input);
     return response.data;
   },
 };

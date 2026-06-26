@@ -132,7 +132,6 @@ function InquiryPage({ user, onLogout, onUpdateUser }: InquiryPageProps) {
 
   return (
     <div className="eo-main-container">
-      {/* ナビゲーションバーの調整 */}
       <nav className="eo-nav" style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
         <div className="eo-nav-links">
           <button onClick={() => { setSelectedId(null); setCurrentPage("list"); }}>{t.navList}</button>
@@ -179,7 +178,6 @@ function InquiryPage({ user, onLogout, onUpdateUser }: InquiryPageProps) {
               user={user} />
           )}
 
-          {/* ★ 1つ目のマイページだけを残し、型もしっかり指定しました */}
           {currentPage === "mypage" && (
             <MyPage 
               user={user} 
@@ -211,7 +209,6 @@ function InquiryPage({ user, onLogout, onUpdateUser }: InquiryPageProps) {
             <InquiryAboutPage lang={language} />
           )}
 
-          {/* ★ ここにあった2つ目の重複コードをすっきり削除しました */}
         </main>
       )}
     </div>

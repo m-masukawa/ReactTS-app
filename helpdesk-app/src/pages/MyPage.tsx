@@ -1,5 +1,5 @@
 import { useState } from "react";
-import type { ChangeEvent } from "react"; // ★修正: 型のみのインポート形式に変更
+import type { ChangeEvent } from "react";
 import type { Language } from "../types/inquiry";
 import type { User } from "../types/auth";
 import { inquiryApi } from "../api/inquiries";
@@ -39,7 +39,6 @@ export const MyPage = ({ user, lang, onBack, onUpdateSuccess }: MyPageProps) => 
   const handleImageChange = (e: ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
-      // 未使用だった localUrl 変数を削除し、警告を解消しました
       const reader = new FileReader();
       reader.onloadend = () => {
         const base64String = reader.result as string;
@@ -72,7 +71,6 @@ export const MyPage = ({ user, lang, onBack, onUpdateSuccess }: MyPageProps) => 
         {t.title}
       </h2>
 
-      {/* アバター画像設定 */}
       <div style={{ marginTop: "25px", display: "flex", alignItems: "center", gap: "20px" }}>
         <div>
           <label style={{ display: "block", color: "#bfa3f0", fontSize: "12px", fontWeight: "bold", marginBottom: "8px" }}>{t.avatarLabel}</label>
@@ -99,7 +97,6 @@ export const MyPage = ({ user, lang, onBack, onUpdateSuccess }: MyPageProps) => 
         </div>
       </div>
 
-      {/* ユーザーネーム設定 */}
       <div style={{ marginTop: "25px" }}>
         <label style={{ display: "block", color: "#bfa3f0", fontSize: "12px", fontWeight: "bold", marginBottom: "8px" }}>{t.nameLabel}</label>
         <input
@@ -114,7 +111,6 @@ export const MyPage = ({ user, lang, onBack, onUpdateSuccess }: MyPageProps) => 
         />
       </div>
 
-      {/* アクションボタン */}
       <div style={{ marginTop: "30px", display: "flex", gap: "15px" }}>
         <button onClick={handleSave} style={{ flex: 1 }}>{t.saveBtn}</button>
         <button onClick={onBack} style={{ background: "#120b24", borderColor: "#29184a", fontSize: "12px" }}>{t.backBtn}</button>
